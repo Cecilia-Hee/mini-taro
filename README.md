@@ -1,5 +1,5 @@
 # mini-taro
-我的mini-taro
+优秀的taro开源实例：
 
 taro-yanxuan地址：https://github.com/qit-team/taro-yanxuan.git
 
