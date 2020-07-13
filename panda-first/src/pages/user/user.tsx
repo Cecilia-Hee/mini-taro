@@ -1,11 +1,7 @@
-// import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import './index.scss'
-import Taro from '@tarojs/taro'
+import './user.scss'
 
-console.log(Taro)
-
-export default class Index extends Taro.Component {
+export default class User extends Component {
 
   componentWillMount () { }
 
@@ -17,9 +13,9 @@ export default class Index extends Taro.Component {
 
   componentDidHide () { }
 
-  render () {  
+  render () {
     return (
-      <View className='index'>
+      <View className='user'>
         <Text>Hello world!</Text>
       </View>
     )
