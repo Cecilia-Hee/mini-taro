@@ -3,7 +3,7 @@
  * 改造一下以支持 promise 调用
  */
 const TaroAlipay = {}
-const apiList = ['getAuthCode', 'getAuthUserInfo']
+const apiList = ['getAuthCode', 'getOpenUserInfo']
 
 apiList.forEach((api) => {
   TaroAlipay[api] = (options = {}) => {

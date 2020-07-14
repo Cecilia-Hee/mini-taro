@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, Input, Button } from '@tarojs/components'
-import './login-pw.scss'
+import './index.scss'
 import { md5 } from 'blueimp-md5';
 
 export default class Login extends Component<any, any> {

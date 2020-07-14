@@ -6,8 +6,8 @@ import { Component } from 'react';
 
 export default class Auth extends Component {
   agreeAuth () {
-    // Taro.showToast('Taro')
     Taro.getUserInfo().then((res) => {
+      // console.log(res);
       const { errMsg, userInfo } = res;
       if(errMsg === 'getUserInfo:ok') {
         Taro.showToast({
@@ -25,7 +25,7 @@ export default class Auth extends Component {
 
   render() {
     return (
-      <Button onClick={this.agreeAuth.bind(this)}>微信登录</Button>
+      <Button open-type='getUserInfo' onClick={this.agreeAuth.bind(this)}>微信登录</Button>
     )
   }
 }

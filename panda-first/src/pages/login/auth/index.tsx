@@ -1,16 +1,15 @@
 import Taro from '@tarojs/taro'
 import * as React from 'react';
-// import { Component } from 'react';
+import { Component } from 'react';
 import {Button} from '@tarojs/components'
 
-export default class Auth extends Taro.Component {
+export default class Auth extends Component {
   constructor() {
     super()
   }
   handleClick() {
-    Taro.showToast({
-      title: '跳转到账号密码登录',
-      icon: 'none'
+    Taro.navigateTo({
+      url: '/pages/login/with-pw/index'
     })
   }
   render() {
