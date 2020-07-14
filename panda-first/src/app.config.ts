@@ -2,7 +2,8 @@ export default {
   pages: [
     'pages/index/index',
     'pages/login/login',
-    'pages/login/with-pw/index'
+    'pages/login/with-pw/index',
+    'pages/shop-cart/shop-cart',
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -21,17 +22,15 @@ export default {
       selectedIconPath: "./assets/tab-bar/home-active.png",
       text: "首页"
     }, {
+      pagePath: "pages/shop-cart/shop-cart",
+      iconPath: "./assets/tab-bar/cart.png",
+      selectedIconPath: "./assets/tab-bar/cart-active.png",
+      text: "购物车"
+    }, {
       pagePath: "pages/login/login",
       iconPath: "./assets/tab-bar/user.png",
       selectedIconPath: "./assets/tab-bar/user-active.png",
       text: "登录"
-    }, 
-    // {
-    //   pagePath: "pages/login/login",
-    //   iconPath: "./assets/tab-bar/user.png",
-    //   selectedIconPath: "./assets/tab-bar/user-active.png",
-    //   text: "支付"
-    // }
-  ]
+    }]
   }
 }
