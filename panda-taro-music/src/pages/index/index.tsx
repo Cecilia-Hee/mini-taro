@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Button, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
 
-import { add, minus, asyncAdd } from '../../actions/counter'
-import api from '../../service/request'
-import * as actions from '../../actions/song'
+// import { add, minus, asyncAdd } from '../../actions/counter'
+import api from '../../service/request.ts'
 import {
   getRecommendPlayList
 } from '../../actions/song'
