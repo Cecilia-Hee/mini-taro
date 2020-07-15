@@ -4,7 +4,7 @@ import { View, Button, Text, Swiper, SwiperItem, Image } from '@tarojs/component
 
 import { add, minus, asyncAdd } from '../../actions/counter'
 import api from '../../service/request'
-
+import * as actions from '../../actions/song'
 import {
   getRecommendPlayList
 } from '../../actions/song'
@@ -60,23 +60,27 @@ interface Index {
   props: IProps;
 }
 
-@connect(({counter, song}) => ({
-  counter,
+// @connect(({counter, song}) => ({
+//   counter,
+//   recommendPlayList: song.recommendPlayList
+// }), (dispatch) => ({
+//   add () {
+//     dispatch(add())
+//   },
+//   dec () {
+//     dispatch(minus())
+//   },
+//   asyncAdd () {
+//     dispatch(asyncAdd())
+//   },
+//   getRecommendPlayList() {
+//     dispatch(getRecommendPlayList())
+//   }
+// }))
+
+@connect(({song}) => ({
   recommendPlayList: song.recommendPlayList
-}), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  },
-  getRecommendPlayList () {
-    dispatch(getRecommendPlayList())
-  }
-}))
+}), {getRecommendPlayList})
 
 class Index extends Component<IProps, PageState> {
   constructor(props) {
@@ -90,14 +94,15 @@ class Index extends Component<IProps, PageState> {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+    // console.log(this.props, nextProps)
     this.setState({
       showLoading: false
     });
   }
 
   componentWillMount() {
-    this.getPersonalRecommendList();
+    // 获取推荐列表
+    this.props.getRecommendPlayList()
     this.getBanner();
   }
 
@@ -111,7 +116,7 @@ class Index extends Component<IProps, PageState> {
   getBanner() {
     api.get('/banner', {
       type: 2
-    }).then(({data}) => {
+    }).then((data) => {
       if(data.banners) {
         this.setState({
           bannerList: data.banners
@@ -120,12 +125,8 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
-  getPersonalRecommendList() {
-    this.props.getRecommendPlayList();
-  }
-
   render () {
-    console.log(this.props)
+    // console.log(this.props)
     const { showLoading, bannerList, searchValue } = this.state;
     const { recommendPlayList, song } = this.props;
     return (

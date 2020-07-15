@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 17:58:26
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-15 18:04:34
+ * @LastEditTime: 2020-07-15 20:41:30
  * @Description: 
  */ 
 import { GETRECOMMENDPLAYLIST } from '../constants/song'
@@ -14,12 +14,15 @@ const INITIAL_STATE : songType = {
 }
 
 export default function song(state = INITIAL_STATE, action) {
+  // console.log("=============================")
+  // console.log(action);
   switch (action.type) {
+    // 获取推荐列表
     case GETRECOMMENDPLAYLIST: 
-      const {recommendPlayList} = action.payload 
+      const {result} = action.payload 
       return {
         ...state,
-        recommendPlayList
+        recommendPlayList: result
       }
     
     default: 
