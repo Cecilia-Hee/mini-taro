@@ -3,16 +3,13 @@ import { connect } from 'react-redux'
 import { View, Button, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
 
 import { add, minus, asyncAdd } from '../../actions/counter'
+import api from '../../service/request'
+
+import {
+  getRecommendPlayList
+} from '../../actions/song'
 
 import './index.scss'
-
-import pic1 from '../../assets/default/1.jpg'
-import pic2 from '../../assets/default/2.jpg'
-
-const primaryBannerList = [
-  {typeTitle: '测试1', pic: pic1, targetId: 1, targetLink: 'https://www.baidu.com'},
-  {typeTitle: '测试1', pic: pic2, targetId: 2, targetLink: 'https://www.baidu.com'},
-]
 
 // #region 书写注意
 //
@@ -27,13 +24,20 @@ const primaryBannerList = [
 type PageStateProps = {
   counter: {
     num: number
-  }
+  };
+  recommendPlayList: Array<{
+    id: number,
+    name: string,
+    picUrl: string,
+    playCount: number // 播放数量
+  }>
 }
 
 type PageDispatchProps = {
   add: () => void
   dec: () => void
   asyncAdd: () => any
+  getRecommendPlayList: () => any
 }
 
 type PageOwnProps = {}
@@ -56,8 +60,9 @@ interface Index {
   props: IProps;
 }
 
-@connect(({ counter }) => ({
-  counter
+@connect(({counter, song}) => ({
+  counter,
+  recommendPlayList: song.recommendPlayList
 }), (dispatch) => ({
   add () {
     dispatch(add())
@@ -67,8 +72,12 @@ interface Index {
   },
   asyncAdd () {
     dispatch(asyncAdd())
+  },
+  getRecommendPlayList () {
+    dispatch(getRecommendPlayList())
   }
 }))
+
 class Index extends Component<IProps, PageState> {
   constructor(props) {
     super(props);
@@ -88,6 +97,7 @@ class Index extends Component<IProps, PageState> {
   }
 
   componentWillMount() {
+    this.getPersonalRecommendList();
     this.getBanner();
   }
 
@@ -97,21 +107,33 @@ class Index extends Component<IProps, PageState> {
 
   componentDidHide () { }
 
+  // 获取banner
   getBanner() {
-    this.setState({
-      bannerList: primaryBannerList
+    api.get('/banner', {
+      type: 2
+    }).then(({data}) => {
+      if(data.banners) {
+        this.setState({
+          bannerList: data.banners
+        })
+      }
     })
   }
 
+  getPersonalRecommendList() {
+    this.props.getRecommendPlayList();
+  }
+
   render () {
+    console.log(this.props)
     const { showLoading, bannerList, searchValue } = this.state;
+    const { recommendPlayList, song } = this.props;
     return (
       <View className='index-page'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
+        {/* <Button className='add_btn' onClick={this.props.add}>+</Button>
         <Button className='dec_btn' onClick={this.props.dec}>-</Button>
         <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
+        <View><Text>{this.props.counter.num}</Text></View> */}
 
         <Swiper className="swiper-list"
           indicatorColor='#999'
@@ -120,9 +142,9 @@ class Index extends Component<IProps, PageState> {
           indicatorDots
           autoplay>
             {
-              bannerList.map((item) => {
+              bannerList.map((item, index) => {
                 return (
-                  <SwiperItem key={item.targetId} className="swiper-list-item">
+                  <SwiperItem key={index + item.targetId} className="swiper-list-item">
                     <Image className="swiper-list-item-img" 
                       src={item.pic} mode={"aspectFill"}/>
                   </SwiperItem>
@@ -130,8 +152,21 @@ class Index extends Component<IProps, PageState> {
               })
             }
         </Swiper>
-        <View className="box-wrapper">
-          <Text className="title">人气歌单推荐</Text>
+        <View className="box-wrapper recommend-list">
+          <View className="recommend-list-title">推荐歌单</View>
+          <View className="recommend-list-content">
+            {
+              recommendPlayList.map((item, index) => {
+                return (
+                  <View key={item.id}>
+                    <Image src={item.picUrl}/>
+                    <View>标题</View>
+                  </View>
+                )
+              })
+            }
+            
+          </View>
         </View>
       </View>
     )
