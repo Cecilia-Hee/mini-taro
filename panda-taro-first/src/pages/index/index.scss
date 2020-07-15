@@ -1,0 +1,29 @@
+.index {
+  flex-direction: column;
+  width: 100%;
+}
+
+.index-page {
+  min-height: 100vh;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  .swiper-list {
+    height: 300px;
+    margin-bottom: 20px;
+    .swiper-list-item {
+      .swiper-list-item-img {
+        width: 100%;
+        max-height: 300px;
+      }
+    }
+  }
+
+  .box-wrapper {
+    margin-bottom: 20px;
+    .title {
+      font-size: 30px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+  }
+}
