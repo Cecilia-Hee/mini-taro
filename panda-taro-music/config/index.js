@@ -1,5 +1,5 @@
 const config = {
-  projectName: 'panda-taro-first',
+  projectName: 'panda-taro-music',
   date: '2020-7-15',
   designWidth: 750,
   deviceRatio: {

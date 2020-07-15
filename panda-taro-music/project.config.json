@@ -1,6 +1,6 @@
 {
   "miniprogramRoot": "./dist",
-  "projectname": "panda-taro-first",
+  "projectname": "panda-taro-music",
   "description": "加入redux",
   "appid": "touristappid",
   "setting": {
