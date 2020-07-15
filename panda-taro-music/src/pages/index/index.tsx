@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { View, Button, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-import api from '../../service/request.ts'
+import api from '../../service/request'
 import {
   getRecommendPlayList
 } from '../../actions/song'
