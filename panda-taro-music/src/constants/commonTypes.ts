@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 18:04:02
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-16 16:06:40
+ * @LastEditTime: 2020-07-16 18:30:39
  * @Description: 
  */ 
 export type MusicItemType = {
@@ -26,6 +26,9 @@ export type MusicItemType = {
 export type playListDetailInfoType = {
   coverImgUrl: string,
   playCount: number,
+  shareCount: number,
+  subscribedCount: number,
+  commentCount: number,
   name: string,
   description?: string,
   tags: Array<string | undefined>,

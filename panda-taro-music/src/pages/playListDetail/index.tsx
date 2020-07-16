@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { Component } from 'react';
 import { getCurrentInstance } from '@tarojs/taro'
 import { View, Button, Text, Image } from '@tarojs/components'
-
+import { formatCount } from '../../utils/common'
 import { add, minus, asyncAdd } from '../../actions/counter'
-import {songType} from '../../constants/commonTypes'
+import { songType } from '../../constants/commonTypes'
 
 import './index.scss'
 import { getPlayListDetail } from '../../actions/song';
@@ -44,13 +44,13 @@ interface Playlistdetail {
 @connect(({ song }) => ({
   song
 }), (dispatch) => ({
-  add () {
+  add() {
     dispatch(add())
   },
-  dec () {
+  dec() {
     dispatch(minus())
   },
-  asyncAdd () {
+  asyncAdd() {
     dispatch(asyncAdd())
   },
   getPlayListDetail(payload) {
@@ -58,74 +58,92 @@ interface Playlistdetail {
   }
 }))
 class Playlistdetail extends Component {
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
   }
 
   componentWillMount() {
-    const {id} = getCurrentInstance().router.params
-    this.props.getPlayListDetail({id})
+    const { id } = getCurrentInstance().router.params
+    this.props.getPlayListDetail({ id })
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () { }
+  componentDidShow() { }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
-  render () {
+  render() {
+    const { playListDetailInfo, playListDetailPrivileges } = this.props.song
     return (
       <View className='playlist-detail'>
         <View className="playlist-info">
-          <View className="playlist-top-wrapper">
-            <View className="left-wrapper">
-              <Image src={''} className="left-img"/>
-            </View>
-            <View className="right-wrapper">
-              <View className="right-name">歌单名称</View>
-              <View className="right-bl">来自于啥</View>
-              <View className="right-desc">描述</View>
-            </View>
+          {/* <!-- 背景 --> */}
+          <View className="playlist-info-bg">
+            <Image src={playListDetailInfo.coverImgUrl} mode="heightFix" />
           </View>
-          <View className="bottom-wrapper">
-            <View className="bottom-item">
-              <View className="at-icon at-icon-message"></View>
-              <View>2334</View>
+
+          {/* 内容 */}
+          <View className="playlist-info-main">
+            <View className="playlist-top-wrapper">
+              <View className="left-wrapper">
+                <Image src={playListDetailInfo.coverImgUrl} className="left-img" />
+                <View className="left-num">
+                  <Text className="at-icon at-icon-sound"></Text>
+                  {formatCount(playListDetailInfo.playCount)}
+                </View>
+              </View>
+              <View className="right-wrapper">
+                <View className="right-name">{playListDetailInfo.name}</View>
+                <View className="right-creator">
+                  <Image className="right-creator-img" src={playListDetailInfo.creator.avatarUrl}/>
+                  <Text>{playListDetailInfo.creator.nickname}</Text>
+                </View>
+                <View className="right-desc">{playListDetailInfo.description}</View>
+              </View>
             </View>
-            <View className="bottom-item">
-              <View className="at-icon at-icon-share"></View>
-              <View>1789</View>
+            <View className="bottom-wrapper">
+              <View className="bottom-item">
+                <View className="at-icon at-icon-message"></View>
+                <View>{playListDetailInfo.commentCount}</View>
+              </View>
+              <View className="bottom-item">
+                <View className="at-icon at-icon-share"></View>
+                <View>{playListDetailInfo.shareCount}</View>
+              </View>
+              <View className="bottom-item">
+                <View className="at-icon at-icon-download-cloud"></View>
+                <View>下载</View>
+              </View>
+              <View className="bottom-item">
+                <View className="at-icon at-icon-check-circle"></View>
+                <View>多选</View>
+              </View>
             </View>
-            <View className="bottom-item">
-              <View className="at-icon at-icon-download-cloud"></View>
-              <View>下载</View>
-            </View>
-            <View className="bottom-item">
-              <View className="at-icon at-icon-check-circle"></View>
-              <View>多选</View>
-            </View>
+
           </View>
         </View>
-        
+
         <View className="playlist-wrapper">
-          <View className="playlist-title">歌曲列表</View>
+          <View className="playlist-title-wrapper">
+            <Text className="playlist-title">歌曲列表</Text>
+            <View className="playlist-tosub">收藏{playListDetailInfo.subscribedCount}</View>
+          </View>
           <View className="playlist-list">
-            <View className="playlist-item">
-              <Text className="item-index">1</Text>
-              <View className="item-music">
-                <Text className="item-music-name">歌曲名称</Text>
-                <Text className="item-music-album">演唱者姓名-专辑名称</Text>
-              </View>
-              <Text className="at-icon at-icon-chevron-right item-more"></Text>
-            </View>
-            <View className="playlist-item">
-              <Text className="item-index">1</Text>
-              <View className="item-music">
-                <Text className="item-music-name">歌曲名称</Text>
-                <Text className="item-music-album">演唱者姓名-专辑名称</Text>
-              </View>
-              <Text className="at-icon at-icon-chevron-right item-more"></Text>
-            </View>
+            {
+              playListDetailInfo.tracks.map((track, index) => {
+                return (
+                  <View className="playlist-item" key={track.id}>
+                    <Text className="item-index">{index + 1}</Text>
+                    <View className="item-music">
+                      <Text className="item-music-name">{track.name}</Text>
+                      <Text className="item-music-album">{track.ar[0] ? track.ar[0].name : ""} - {track.al.name}</Text>
+                    </View>
+                    <Text className="at-icon at-icon-chevron-right item-more"></Text>
+                  </View>
+                )
+              })
+            }
           </View>
         </View>
       </View>

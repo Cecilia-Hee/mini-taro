@@ -2,58 +2,126 @@
   width: 100%;
   .playlist-info {
     background-color: rgba($color: black, $alpha: 0.6);
-    padding: 80px 20px 0;
-    .playlist-top-wrapper {
-      display: flex;
-      padding: 20px;
+    position: relative;
+    .playlist-info-bg {
+      width: 100%;
+      height: 520px;  
+      taro-image-core {
+        width: 100%;
+        height: 100%;
+      }
+      img { 
+        width: 750px;
+        height: 520px;
+        opacity: 0.6;
+        transform: scale(2);
+      }
+    }
+    .playlist-info-main {
+      padding: 80px 20px 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       box-sizing: border-box;
-      margin-bottom: 40px;
-      .left-wrapper {
-        width: 240px;
-        height: 240px;
-        margin-right: 40px;
-        border-radius: 8px;
-        background-color: lightblue;
-        .left-img {
-          width: 100%;
-          height: 100%;
+      .playlist-top-wrapper {
+        display: flex;
+        padding: 20px;
+        box-sizing: border-box;
+        margin-bottom: 40px;
+        .left-wrapper {
+          width: 240px;
+          height: 240px;
+          margin-right: 40px;
+          border-radius: 8px;
+          background-color: lightblue;
+          position: relative;  
+          flex-shrink: 0;
+          .left-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+          }
+          .left-num {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            font-size: 20px;
+            color: #ffffff;
+          }
+        }
+        .right-wrapper {
+          color: #ffffff;
+          .right-name {
+            font-size: 32px;
+            line-height: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+          }
+          .right-creator {
+            font-size: 20px;
+            line-height: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            .right-creator-img{
+              width: 40px;
+              height: 40px;
+              border-radius: 100%;
+              margin-right: 20px;
+            }
+          }
+          .right-desc {
+            font-size: 20px;
+            line-height: 30px;
+            text-align: center;
+            overflow : hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-align: left;       
+          }
         }
       }
-      .right-wrapper {
-        color: #ffffff;
-        .right-name {
-          font-size: 32px;
-          line-height: 42px;
-          margin-bottom: 20px;
-          font-weight: 700;
-        }
-        .right-bl {
-          font-size: 20px;
-          line-height: 30px;
-          margin-bottom: 20px;
-        }
-        .right-desc {
-          font-size: 20px;
-          line-height: 30px;
+      .bottom-wrapper {
+        padding: 20px;
+        display: flex;
+        justify-content: space-around; 
+        .bottom-item {
+          font-size: 24px;
+          color: #ffffff;
           text-align: center;
         }
       }
     }
-    .bottom-wrapper {
-      padding: 20px;
-      display: flex;
-      justify-content: space-around; 
-      .bottom-item {
-        font-size: 24px;
-        color: #ffffff;
-        align-items: center;
-      }
-    }
+    
   }
 
   .playlist-wrapper {
     padding: 20px 40px;
     box-sizing: border-box;
+    .playlist-title-wrapper {
+      display: flex;
+      justify-content: space-between;
+      .playlist-title {
+        font-size: 30px;
+        margin-bottom: 20px;
+      }
+      .playlist-tosub {
+        color: #ffffff;
+        background-color: RGBA(224,60,52,1.00);
+        padding: 10px 20px;
+        font-size: 20px;
+        height: 60px;
+        // width: 120px;
+        border-radius: 20px;
+        text-align: center;
+        line-height: 60px;
+        box-sizing: border-box;
+      }
+    }
+   
     .playlist-item {
       display: flex;
       align-items: center;
