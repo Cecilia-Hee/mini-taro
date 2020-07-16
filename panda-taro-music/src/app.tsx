@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 
 import configStore from './store'
-
-import './app.scss'
+import "taro-ui/dist/style/index.scss"; // 全局引入一次即可
+import './styles/common.scss'
 
 const store = configStore()
 
@@ -21,6 +21,7 @@ class App extends Component {
   render () {
     return (
       <Provider store={store}>
+        
         {this.props.children}
       </Provider>
     )

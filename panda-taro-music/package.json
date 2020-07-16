@@ -40,12 +40,15 @@
     "@tarojs/runtime": "3.0.2",
     "@tarojs/taro": "3.0.2",
     "@types/node": "^14.0.23",
+    "nerv-devtools": "^1.5.7",
+    "nervjs": "^1.5.7",
     "react": "^16.10.0",
     "react-dom": "^16.10.0",
     "react-redux": "^7.2.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "taro-ui": "^2.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",

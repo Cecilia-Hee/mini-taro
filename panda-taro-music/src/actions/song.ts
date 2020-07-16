@@ -2,13 +2,17 @@
  * @Author: Helijun
  * @Date: 2020-07-15 17:16:50
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-15 20:24:03
+ * @LastEditTime: 2020-07-16 16:03:24
  * @Description: 
  */ 
-import api from '../service/request'
 import createAction from '../service/redux'
 import {
-  GETRECOMMENDPLAYLIST
+  GET_RECOMMEND_LIST,
+  GET_PALYLIST_DETAIL
+} from '../constants/api'
+import {
+  GETRECOMMENDPLAYLIST,
+  GETPLAYLISTDETAIL
 } from '../constants/song'
 
 // export const getRecommendPlayList = () => {
@@ -25,8 +29,16 @@ import {
 //   }
 // }
 
+// 获取每日推荐歌单
 export const getRecommendPlayList = payload => createAction({
-  url: '/personalized',
+  url: GET_RECOMMEND_LIST,
   type: GETRECOMMENDPLAYLIST,
+  payload
+})
+
+// 获取歌单详情
+export const getPlayListDetail = payload => createAction({
+  url: GET_PALYLIST_DETAIL,
+  type: GETPLAYLISTDETAIL,
   payload
 })

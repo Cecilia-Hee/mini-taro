@@ -1,0 +1,32 @@
+.page-top-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: #ffffff;
+  z-index: 1000;
+  .top-tab-wrapper {
+    flex: 1;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .top-tab-item {
+      margin-right: 20px;
+      height: 20px;
+      line-height: 20px;
+      &:last-of-type {
+        margin-right: 0;
+      }
+      &.active {
+        font-size: 26px;
+        font-weight: 700;
+      }
+    }
+  }
+}

@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Button, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
-
+import { View, Swiper, SwiperItem, Image } from '@tarojs/components'
+import PageHeader from '../../components/page-header/index';
+import Taro from '@tarojs/taro'
 // import { add, minus, asyncAdd } from '../../actions/counter'
+
 import api from '../../service/request'
+import {
+  GET_BANNER
+} from '../../constants/api'
 import {
   getRecommendPlayList
 } from '../../actions/song'
@@ -113,7 +118,7 @@ class Index extends Component<IProps, PageState> {
 
   // 获取banner
   getBanner() {
-    api.get('/banner', {
+    api.get(GET_BANNER, {
       type: 2
     }).then((data) => {
       if(data.banners) {
@@ -124,16 +129,26 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
+  // 跳转到详情
+  goRecommendDetail(item) {
+    Taro.navigateTo({
+      url: `/pages/playListDetail/index?id=${item.id}&name=${item.name}`
+      // url: `/pages/playListDetail/index`
+    })
+  }
+
   render () {
     // console.log(this.props)
     const { showLoading, bannerList, searchValue } = this.state;
     const { recommendPlayList, song } = this.props;
+
+    {/* <Button className='add_btn' onClick={this.props.add}>+</Button>
+    <Button className='dec_btn' onClick={this.props.dec}>-</Button>
+    <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
+    <View><Text>{this.props.counter.num}</Text></View> */}
     return (
-      <View className='index-page'>
-        {/* <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View> */}
+      <View className='index-page page'>
+        <PageHeader></PageHeader>
 
         <Swiper className="swiper-list"
           indicatorColor='#999'
@@ -153,14 +168,17 @@ class Index extends Component<IProps, PageState> {
             }
         </Swiper>
         <View className="box-wrapper recommend-list">
-          <View className="recommend-list-title">推荐歌单</View>
+          <View className="title recommend-list-title">推荐歌单</View>
           <View className="recommend-list-content">
             {
               recommendPlayList.map((item, index) => {
                 return (
-                  <View key={item.id}>
-                    <Image src={item.picUrl}/>
-                    <View>标题</View>
+                  <View key={item.id} className="recommend-list-content-item" onClick={this.goRecommendDetail.bind(this, item)}>
+                    <Image src={item.picUrl} className="recommend-list-content-item-img"/>
+                    <View className="recommend-list-content-item-name">{item.name}</View>
+                    <View className="recommend-list-content-item-tag">
+                      {item.playCount < 10000 ? item.playCount : `${Number(item.playCount / 10000).toFixed(0)}万`}
+                    </View>
                   </View>
                 )
               })
