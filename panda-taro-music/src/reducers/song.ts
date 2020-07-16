@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 17:58:26
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-16 17:09:49
+ * @LastEditTime: 2020-07-16 20:05:46
  * @Description: 
  */ 
 import { 
@@ -17,6 +17,9 @@ const INITIAL_STATE : songType = {
   playListDetailInfo: {
     coverImgUrl: '',
     name: '',
+    shareCount: 0, 
+    subscribedCount:0, 
+    commentCount: 0,
     playCount: 0,
     tags: [],
     creator: {
@@ -25,6 +28,7 @@ const INITIAL_STATE : songType = {
     },
     tracks: []
   },
+  playListDetailPrivileges: []
 }
 
 export default function song(state = INITIAL_STATE, action) {
@@ -45,7 +49,7 @@ export default function song(state = INITIAL_STATE, action) {
       return {
         ...state,
         playListDetailInfo: playlist,
-        playListDetailPrivileges: action.payload.playListDetailPrivileges
+        playListDetailPrivileges: action.payload.privileges
       }
     
     default: 

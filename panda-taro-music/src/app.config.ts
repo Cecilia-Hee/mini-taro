@@ -4,7 +4,8 @@ export default {
     'pages/login/login',
     'pages/login/with-pw/index',
     'pages/shop-cart/shop-cart',
-    'pages/playListDetail/index'
+    'pages/playListDetail/index',
+    'pages/songDetail/index'
   ],
   window: {
     backgroundTextStyle: 'light',

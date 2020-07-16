@@ -2,7 +2,8 @@
   width: 100%;
   .playlist-info {
     background-color: rgba($color: black, $alpha: 0.6);
-    position: relative;
+    position: relative;    
+    border-radius: 8px;
     .playlist-info-bg {
       width: 100%;
       height: 520px;  
@@ -34,7 +35,6 @@
           width: 240px;
           height: 240px;
           margin-right: 40px;
-          border-radius: 8px;
           background-color: lightblue;
           position: relative;  
           flex-shrink: 0;
@@ -111,11 +111,11 @@
       .playlist-tosub {
         color: #ffffff;
         background-color: RGBA(224,60,52,1.00);
-        padding: 10px 20px;
+        padding: 0px 20px;
         font-size: 20px;
         height: 60px;
         // width: 120px;
-        border-radius: 20px;
+        border-radius: 40px;
         text-align: center;
         line-height: 60px;
         box-sizing: border-box;

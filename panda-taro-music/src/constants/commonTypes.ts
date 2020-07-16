@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 18:04:02
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-16 18:30:39
+ * @LastEditTime: 2020-07-16 20:03:11
  * @Description: 
  */ 
 export type MusicItemType = {
@@ -42,6 +42,9 @@ export type playListDetailInfoType = {
 export type songType = {
   // 歌单详情
   playListDetailInfo: playListDetailInfoType,
+  playListDetailPrivileges: Array<{
+    st: number
+  }>
   // 推荐歌单
   recommendPlayList: Array<{}>
 }

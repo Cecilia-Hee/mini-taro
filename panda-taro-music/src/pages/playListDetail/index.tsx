@@ -2,11 +2,11 @@ import * as React from 'react';
 import { connect } from 'react-redux'
 import { Component } from 'react';
 import { getCurrentInstance } from '@tarojs/taro'
-import { View, Button, Text, Image } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import { formatCount } from '../../utils/common'
 import { add, minus, asyncAdd } from '../../actions/counter'
 import { songType } from '../../constants/commonTypes'
-
+import Taro from '@tarojs/taro'
 import './index.scss'
 import { getPlayListDetail } from '../../actions/song';
 
@@ -63,8 +63,11 @@ class Playlistdetail extends Component {
   }
 
   componentWillMount() {
-    const { id } = getCurrentInstance().router.params
+    const { id, name } = getCurrentInstance().router.params
     this.props.getPlayListDetail({ id })
+    Taro.setNavigationBarTitle({
+      title: name
+    });
   }
 
   componentWillUnmount() { }
@@ -72,6 +75,20 @@ class Playlistdetail extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
+
+  playSong(songId:number, playStatus: number) {
+    if(playStatus === 0) {
+      Taro.navigateTo({
+        url: `/pages/songDetail/index?id=${songId}`
+      })
+    } else {
+      Taro.showToast({
+        title: '暂无版权',
+        icon: 'none'
+      })
+    }
+    
+  }
 
   render() {
     const { playListDetailInfo, playListDetailPrivileges } = this.props.song
@@ -133,7 +150,7 @@ class Playlistdetail extends Component {
             {
               playListDetailInfo.tracks.map((track, index) => {
                 return (
-                  <View className="playlist-item" key={track.id}>
+                  <View className="playlist-item" key={track.id} onClick={this.playSong.bind(this,track.id, playListDetailPrivileges[index].st)}>
                     <Text className="item-index">{index + 1}</Text>
                     <View className="item-music">
                       <Text className="item-music-name">{track.name}</Text>
