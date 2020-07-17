@@ -2,12 +2,13 @@
  * @Author: Helijun
  * @Date: 2020-07-15 17:58:26
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-16 20:05:46
+ * @LastEditTime: 2020-07-17 13:46:03
  * @Description: 
  */ 
 import { 
   GETRECOMMENDPLAYLIST,
-  GETPLAYLISTDETAIL
+  GETPLAYLISTDETAIL,
+  GETSONGINFO
 } from '../constants/song'
 
 import {songType} from '../constants/commonTypes'
@@ -28,7 +29,20 @@ const INITIAL_STATE : songType = {
     },
     tracks: []
   },
-  playListDetailPrivileges: []
+  playListDetailPrivileges: [],
+  currentSongInfo: {
+    id: 0,
+    name: '',   // 歌曲名称
+    ar: [],
+    al: {
+      picUrl: '',   // 播放背景？
+      name: ''      // ?
+    },
+    url: '',
+    lrcInfo: '',   // 歌词信息
+    dt: 0,     // 总时长
+    st: 0, 
+  }
 }
 
 export default function song(state = INITIAL_STATE, action) {
@@ -50,6 +64,13 @@ export default function song(state = INITIAL_STATE, action) {
         ...state,
         playListDetailInfo: playlist,
         playListDetailPrivileges: action.payload.privileges
+      }
+
+    case GETSONGINFO:
+      const { songs } = action.payload
+      return {
+        ...state,
+        currentSongInfo: songs[0]
       }
     
     default: 

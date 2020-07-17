@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux'
 import { Component } from 'react';
-import { getCurrentInstance } from '@tarojs/taro'
+// import { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import { formatCount } from '../../utils/common'
 import { add, minus, asyncAdd } from '../../actions/counter'
 import { songType } from '../../constants/commonTypes'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+
 import './index.scss'
 import { getPlayListDetail } from '../../actions/song';
 
@@ -60,9 +61,14 @@ interface Playlistdetail {
 class Playlistdetail extends Component {
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
+    console.log('componentWillReceiveProps')
   }
 
-  componentWillMount() {
+  // static getDerivedStateFromProps(props, state) {
+  //   console.log('getDerivedStateFromProps', props, state)
+  // }
+
+  componentDidMount() {
     const { id, name } = getCurrentInstance().router.params
     this.props.getPlayListDetail({ id })
     Taro.setNavigationBarTitle({
