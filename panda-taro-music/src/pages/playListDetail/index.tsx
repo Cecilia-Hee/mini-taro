@@ -102,9 +102,8 @@ class Playlistdetail extends Component {
       <View className='playlist-detail'>
         <View className="playlist-info">
           {/* <!-- 背景 --> */}
-          <View className="playlist-info-bg">
-            <Image src={playListDetailInfo.coverImgUrl} mode="heightFix" />
-          </View>
+          <Image src={playListDetailInfo.coverImgUrl} mode="heightFix" className="playlist-info-bg"/>
+          
 
           {/* 内容 */}
           <View className="playlist-info-main">

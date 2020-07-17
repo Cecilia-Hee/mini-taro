@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 14:38:53
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-15 20:53:16
+ * @LastEditTime: 2020-07-17 18:19:31
  * @Description: 
  */ 
 import Taro from '@tarojs/taro'
@@ -16,7 +16,8 @@ type OptionType = {
   data?: object | string,
   method?: any,
   header?: object,
-  xhrFields: object
+  xhrFields: object,
+  success: any
 }
 
 type CookieType = {
@@ -63,12 +64,15 @@ export default {
         'content-type': contentType,
         cookie: Taro.getStorageSync('cookies')  // 每次请求都携带cookie头
       },
-      xhrFields: { withCredentials: true }
+      xhrFields: { withCredentials: true },
+      success(res) {
+        setCookie(res)
+      }
     };
 
     return Taro.request(option).then((res) => {
         // console.log("res:", res)
-        setCookie(res)
+        // setCookie(res)
         // 
         if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
           return logError('api', '请求资源不存在')

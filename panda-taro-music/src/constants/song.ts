@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 17:20:12
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-17 13:33:47
+ * @LastEditTime: 2020-07-17 18:05:50
  * @Description: 
  */
 
@@ -14,3 +14,9 @@ export const GETPLAYLISTDETAIL: string = 'GETPLAYLISTDETAIL'
 
 // 获取当前播放的歌曲
 export const GETSONGINFO: string = 'GETSONGINFO'
+
+// 修改歌曲的播放状态
+export const CHANGEPLAYMODE: string = 'CHANGEPLAYMODE'
+
+// 更新喜欢的歌曲的列表
+export const UPDATELIKEMUSICLIST: string = 'UPDATELIKEMUSICLIST'

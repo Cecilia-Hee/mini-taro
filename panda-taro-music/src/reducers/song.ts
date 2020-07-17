@@ -2,13 +2,14 @@
  * @Author: Helijun
  * @Date: 2020-07-15 17:58:26
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-17 13:46:03
+ * @LastEditTime: 2020-07-17 17:47:21
  * @Description: 
  */ 
 import { 
   GETRECOMMENDPLAYLIST,
   GETPLAYLISTDETAIL,
-  GETSONGINFO
+  GETSONGINFO,
+  CHANGEPLAYMODE
 } from '../constants/song'
 
 import {songType} from '../constants/commonTypes'
@@ -42,7 +43,10 @@ const INITIAL_STATE : songType = {
     lrcInfo: '',   // 歌词信息
     dt: 0,     // 总时长
     st: 0, 
-  }
+  },
+  playMode: 'loop',
+  currentSongIndex: 0,  // 当前歌曲的index
+  canPlayList: [],
 }
 
 export default function song(state = INITIAL_STATE, action) {
@@ -59,18 +63,39 @@ export default function song(state = INITIAL_STATE, action) {
     
     // 获取歌单详情
     case GETPLAYLISTDETAIL:
-      const { playlist } = action.payload;
+      const { playlist, privileges } = action.payload;
+      let canPlayList = playlist.tracks.filter((item, index) => {
+        return privileges[index].st !== -200
+      })
       return {
         ...state,
         playListDetailInfo: playlist,
-        playListDetailPrivileges: action.payload.privileges
+        playListDetailPrivileges: privileges,
+        canPlayList
       }
 
     case GETSONGINFO:
-      const { songs } = action.payload
+      const { currentSongInfo } = action.payload
+      let currentSongIndex = state.canPlayList.findIndex((item) => item.id === currentSongInfo.id)
+      state.canPlayList.map((item, index) => {
+        item.current = false;
+        if(currentSongIndex === index) {
+          item.current = true;
+        }
+        return item;
+      })
       return {
         ...state,
-        currentSongInfo: songs[0]
+        currentSongInfo,
+        currentSongIndex,
+        canPlayList: state.canPlayList
+      }
+
+    case CHANGEPLAYMODE: 
+      const {playMode} = action.payload;
+      return {
+        ...state,
+        playMode
       }
     
     default: 

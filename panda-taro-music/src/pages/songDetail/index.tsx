@@ -5,7 +5,7 @@ import { View, Button, Text, Image } from '@tarojs/components'
 
 import { add, minus, asyncAdd } from '../../actions/counter'
 
-import { getSongInfo } from '../../actions/song'
+import { getSongInfo, changePlayMode, likeMusic } from '../../actions/song'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 
 import './index.scss'
@@ -22,6 +22,7 @@ import songOperationPlayPause from '../../assets/images/ajf.png'
 import songOperationNext from '../../assets/images/ajb.png'
 import songOperationLike from '../../assets/images/song/play_icn_love.png'
 import songOperationLiked from '../../assets/images/song/play_icn_loved.png'
+import songMusicBefore from '../../assets/images/aag.png'
 
 
 // #region 书写注意
@@ -30,17 +31,9 @@ import songOperationLiked from '../../assets/images/song/play_icn_loved.png'
 // 需要显示声明 connect 的参数类型并通过 interface 的方式指定 Taro.Component 子类的 props
 // 这样才能完成类型检查和 IDE 的自动提示
 // 使用函数模式则无此限制  
-// 我觉得现在的生活挺好的，比较平稳，除了工作还没有着落之外，其他的基本上都在轨道上走，
-// 我不想有什么风浪，我希望你也是这样想的
-// 你们之前的事情，我不想记得，既然她来了北京，必然会约你吃饭啥的，你自己做决定
-// 既然现在我是你女朋友，我希望你会尊重我，考虑我的感受，实话说我不喜欢她，不只是因为你们之前的暧昧关系让我非常难受
-// 我还觉得她这个人太小气，上次是微博取关，这次是屏蔽朋友圈，30岁的人了，真的不至于，幼不幼稚，
-// 我和她是永远不可能成为朋友的，我只想我的生活跟她没有任何交集，离的越远越好
-// 当然了，我不喜欢的人，自然也不愿意你过多接触，我希望你能考虑到我的感受
-// 当然了，如果，你真的禁不住诱惑了，真的要去赴约啥的，也请你告诉我，不要以为瞒着我我就不会知道了，瞒着我我会更生气
-// 你可以有暧昧对象，我也会找一个，不就是跟人暧昧，谁不会一样
-// 还有，每次我跟你说这些的时候，你都像个吃瓜群众一样，看着我和她暗自撕逼，不要忘了她这么对我，都是因为你
-// 而且你现在是我男朋友，你有必要让我觉得有安全感，不要让这些乱七八糟的事情，打乱我们的生活
+// 我感觉现在的问题是，大家都想做事情，但是没有太多的事情可以做，然后自己学习，又有些不得劲，虽然是学了
+// 但是不知道最终的效果是怎么样的，也就是缺乏练习，所以我想着我们可以找一些开源项目做一做，或者我们自己做一些开源项目
+// 提高工作的积极性&成就感
 
 // ref: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20796
 //
@@ -54,15 +47,18 @@ type PageStateProps = {
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
   getSongInfo: (params: object) => any
+  changePlayMode: (object) => any
+  likeMusic: (object) => any
 }
 
 type PageOwnProps = {}
 
-type PageState = {}
+type PageState = {
+  songPlayModeImg: string;
+  star: boolean,
+  switchStar: boolean;  // 是否切换过状态
+}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
@@ -75,34 +71,43 @@ interface Songdetail {
 }), (dispatch) => ({
   getSongInfo (payload : object) {
     dispatch(getSongInfo(payload))
+  },
+  changePlayMode(payload: object) {
+    dispatch(changePlayMode(payload))
+  },
+  likeMusic(payload: object) {
+    dispatch(likeMusic(payload))
   }
 }))
-class Songdetail extends Component {
+class Songdetail extends Component<IProps, PageState> {
   constructor(props) {
     super(props);
     this.state = {
-
+      songPlayModeImg: songPlayModeLoop,
+      star: false,
+      switchStar: false
     }
   }
-  // componentWillReceiveProps (nextProps) {
-  //   console.log(this.props, nextProps)
+  componentWillReceiveProps (nextProps) {
+    console.log(this.props, nextProps)
 
-  //   // props有改变时，改变页面上的数据
+    // props有改变时，改变页面上的数据
     
-  //   // this.setSongInfo(nextProps.song.currentSongInfo)
-  // }
-
-  static getDerivedStateFromProps(nextProps, nextState) {
-    console.log('getDerivedStateFromProps:', nextProps, nextState)
-    Songdetail.prototype.setSongInfo(nextProps.song.currentSongInfo)
-    return null;
+    this.setSongInfo(nextProps.song.currentSongInfo)
   }
+
+  // static getDerivedStateFromProps(nextProps, nextState) {
+  //   console.log('getDerivedStateFromProps:', nextProps, nextState)
+  //   Songdetail.prototype.setSongInfo(nextProps.song.currentSongInfo)
+  //   return null;
+  // }
 
   componentWillUnmount () { }
 
   componentDidMount() {
     const { id } = getCurrentInstance().router.params
-    this.props.getSongInfo({ids: id});
+    this.props.getSongInfo({id: id});
+    this.computePlayMode();
     
   }
 
@@ -116,24 +121,148 @@ class Songdetail extends Component {
       title: name
     })
     // 设置播放器相关
-    backgroundAudioManager.title = name;
-    backgroundAudioManager.coverImgUrl = al.picUrl;
-    backgroundAudioManager.src = url;
+    // backgroundAudioManager.title = name;
+    // backgroundAudioManager.coverImgUrl = al.picUrl;
+    // backgroundAudioManager.src = url;
+  }
+
+  // 得到初始的播放模式
+  computePlayMode() {
+    const playMode = this.props.song.playMode
+    switch (playMode) {
+      case 'one':
+        this.setState({
+          songPlayModeImg: songPlayModeOne
+        })
+        break;
+      case 'shuffle':
+        this.setState({
+          songPlayModeImg: songPlayModeShuffle
+        })
+        break;
+      default:
+        this.setState({
+          songPlayModeImg: songPlayModeLoop
+        })
+        break;
+    }
+  }
+
+  // 修改歌曲播放模式
+  changePlayMode() {
+    let { playMode } = this.props.song;
+    console.log(playMode)
+    if(playMode === 'loop') {
+      playMode = 'one',
+      this.setState({
+        songPlayModeImg: songPlayModeOne
+      })
+      Taro.showToast({
+        title: '单曲循环',
+        icon: 'none',
+        duration: 2000
+      })
+    } else if(playMode === 'one') {
+      playMode = 'shuffle',
+      this.setState({
+        songPlayModeImg: songPlayModeShuffle
+      })
+      Taro.showToast({
+        title: '随机播放',
+        icon: 'none',
+        duration: 2000
+      })
+    } else if(playMode === 'shuffle') {
+      playMode = 'loop',
+      this.setState({
+        songPlayModeImg: songPlayModeLoop
+      })
+      Taro.showToast({
+        title: '列表循环',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+
+    this.props.changePlayMode({playMode})
+  }
+
+  // 切换到前一首歌
+  getPrevSong() {
+    const {currentSongIndex, canPlayList, playMode} = this.props.song
+    let preSongIndex = currentSongIndex - 1;
+    if(playMode === 'shuffle') {
+      // 随机播放
+      return;
+    }
+    if(currentSongIndex == 0) {
+      preSongIndex = canPlayList.length - 1;
+    }
+    this.props.getSongInfo({
+      id: canPlayList[preSongIndex].id
+    })
+  }
+
+  // 切换到下一首歌
+  getNextSong() {
+    const {currentSongIndex, canPlayList, playMode} = this.props.song
+    let nextSongIndex = currentSongIndex + 1;
+    if(playMode === 'shuffle') {
+      // 
+      return;
+    }
+    if(currentSongIndex === canPlayList.length + 1) {
+      nextSongIndex = 0;
+    }
+    this.props.getSongInfo({
+      id: canPlayList[nextSongIndex].id
+    })
+  }
+
+  // 标记收藏&喜
+  likeMusic() {
+    const {star} = this.state
+    const { id } = this.props.song.currentSongInfo
+    this.props.likeMusic({
+      id,
+      like: !star
+    });
+    this.setState({
+      switchStar: true
+    })
   }
 
   render () {
     const { currentSongInfo } = this.props.song
+    const { songPlayModeImg, star } = this.state
     return (
       <View className='song-detail'>
+        {/* 背景，这里加了高斯模糊 */}
         <Image className="song-detail-bg" src={currentSongInfo.al.picUrl} />
 
+        {/* 音乐转盘 */}
+        <View className="song-music">
+          <View className="song-music-main">
+            <Image src={songMusicBefore} className="song-music-main-before"/>
+            <View className="song-music-main-cover">
+              <View className="song-music-main-img">
+                <Image src={currentSongInfo.al.picUrl} className="song-music-main-img-cover"/>
+              </View>
+            </View>
+          </View>
+          <View className="song-mudic-lgour">
+            <View className="song-music-lgour-cover"></View>
+          </View>
+        </View>
+
+        {/* 底部操作按钮们 */}
         <View className="song-bottom">
           <View className="song-operation">
-            <Image src={songPlayModeLoop} className="song-operation-mode"/>
-            <Image src={songOperationPrev} className="song-operation-prev"/>
-            <Image src={songOperationPlayPause} className="song-operation-play"/>
-            <Image src={songOperationNext} className="song-operation-next"/>
-            <Image src={songOperationLike} className="song-operation-like"/>
+            <Image src={songPlayModeImg} className="song-operation song-operation-mode"  onClick={this.changePlayMode.bind(this)}/>
+            <Image src={songOperationPrev} className="song-operation song-operation-prev" onClick={this.getPrevSong.bind(this)} />
+            <Image src={songOperationPlayPause} className="song-operation song-operation-play"/>
+            <Image src={songOperationNext} className="song-operation song-operation-next" onClick={this.getNextSong.bind(this)}/>
+            <Image src={star ? songOperationLiked : songOperationLike} className="song-operation song-operation-like" onClick={this.likeMusic.bind(this)}/>
           </View>
         </View>
         

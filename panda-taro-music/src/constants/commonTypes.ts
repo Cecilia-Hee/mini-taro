@@ -2,7 +2,7 @@
  * @Author: Helijun
  * @Date: 2020-07-15 18:04:02
  * @LastEditors: Helijun
- * @LastEditTime: 2020-07-17 11:26:43
+ * @LastEditTime: 2020-07-17 17:31:16
  * @Description: 
  */ 
 export type MusicItemType = {
@@ -64,7 +64,12 @@ export type songType = {
   }>
   // 推荐歌单
   recommendPlayList: Array<{}>,
-
   // 当前播放的歌曲详情
-  currentSongInfo: curentSongInfoType
+  currentSongInfo: curentSongInfoType,
+  // 播放模式
+  playMode: 'loop' | 'one' | 'shuffle',
+  // 当前歌曲的index
+  currentSongIndex: number,
+  // 可播放歌曲的列表
+  canPlayList: Array<MusicItemType>
 }
